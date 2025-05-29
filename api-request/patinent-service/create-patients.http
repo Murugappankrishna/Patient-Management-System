@@ -1,0 +1,12 @@
+### Creates a New Patient Entity
+POST http://127.0.0.1:8081/patients
+Content-Type: application/json
+
+{
+  "name": "Murugappan M M",
+  "email": "updated@test.co.in",
+  "address": "sample address",
+  "dateOfBirth": "2003-04-09",
+  "registeredDate": "2025-01-01"
+}
+

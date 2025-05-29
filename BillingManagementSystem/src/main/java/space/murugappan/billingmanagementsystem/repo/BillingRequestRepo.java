@@ -1,0 +1,20 @@
+package space.murugappan.billingmanagementsystem.repo;
+
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
+import space.murugappan.billingmanagementsystem.model.BillingRequestModel;
+
+import java.util.UUID;
+
+@Repository
+public interface BillingRequestRepo  extends JpaRepository<BillingRequestModel, UUID> {
+    Boolean existsByPatientEmail(String patientEmail);
+    @Query("UPDATE BillingRequestModel BM SET BM.paymentStatus=:status WHERE BM.accountId=:id")
+    @Modifying
+    @Transactional
+    int updateStatusById(UUID id , PaymentStatus status);
+}

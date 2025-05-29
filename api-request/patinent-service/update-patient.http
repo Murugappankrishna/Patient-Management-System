@@ -1,0 +1,12 @@
+### update an existing patinet
+PUT http://127.0.0.1:8080/patients/123e4567-e89b-12d3-a456-426614174002
+Content-Type: application/json
+
+{
+  "name": "Murugappan M M UPDATED",
+  "email": "teest_Updated@test.co.in",
+  "address": "sample address",
+  "dateOfBirth": "2003-04-09"
+}
+
+###
