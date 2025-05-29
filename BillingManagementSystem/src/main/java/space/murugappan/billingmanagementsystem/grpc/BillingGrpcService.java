@@ -48,6 +48,7 @@ public class BillingGrpcService extends BillingServiceImplBase {
         BillingResponse  billingResponse  = billingService.updateBillingStatus(UpdateBillingRequest);
 
       //responseObserver.onNext(billingResponse);
+
         responseObserver.onCompleted();
 
 
