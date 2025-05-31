@@ -22,6 +22,7 @@ public class GrpcToJavaMapper {
         return AccountResponse.newBuilder()
                 .setAccountId(account.getAccountId().toString())
                 .setPatientName(account.getPatientName())
+                .setPatientEmail(account.getPatientEmail())
                 .setPatientId(account.getPatientId().toString())
                 .build();
 
