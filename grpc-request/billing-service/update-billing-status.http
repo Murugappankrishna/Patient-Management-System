@@ -1,0 +1,10 @@
+### GRPC request to update BillingStatus
+GRPC 127.0.0.1:4001/BillingService/UpdateBillingStatus
+
+{
+  "accountId": "b541ce2a-c32d-4158-ac0a-f2679f2e1bc5",
+  "paymentStatus": "COMPLETED"
+
+}
+
+###

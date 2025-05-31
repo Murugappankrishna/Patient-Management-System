@@ -2,7 +2,9 @@ package space.murugappan.billingmanagementsystem.mapper;
 
 import billing.AccountRequest;
 import billing.AccountResponse;
+import billing.UpdateBillingResponse;
 import org.springframework.stereotype.Component;
+import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
 import space.murugappan.billingmanagementsystem.model.Account;
 
 import java.util.UUID;
@@ -24,6 +26,14 @@ public class AccountMapper {
                 .setPatientName(account.getPatientName())
                 .setPatientEmail(account.getPatientEmail())
                 .setPatientId(account.getPatientId().toString())
+                .build();
+
+    }
+
+    public UpdateBillingResponse modelClassToGrpcUpdateBillingResponse(Account updatedAccount) {
+        return UpdateBillingResponse.newBuilder().
+                setPatientName(updatedAccount.getPatientName())
+                .setPaymentStatus((updatedAccount.getPaymentStatus()).toString())
                 .build();
 
     }

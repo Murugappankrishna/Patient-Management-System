@@ -3,9 +3,11 @@ package space.murugappan.billingmanagementsystem.service;
 import billing.AccountResponse;
 import billing.AccountRequest;
 import billing.UpdateBillingRequest;
+import billing.UpdateBillingResponse;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
+import space.murugappan.billingmanagementsystem.exception.DataNotFoundException;
 import space.murugappan.billingmanagementsystem.exception.EmailAlreadyExistException;
 import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
 import space.murugappan.billingmanagementsystem.mapper.AccountMapper;
@@ -41,11 +43,11 @@ public class BillingService {
 
     }
 
-    public AccountResponse updateBillingStatus(UpdateBillingRequest updateBillingRequest) {
+    public UpdateBillingResponse updateBillingStatus(UpdateBillingRequest updateBillingRequest) {
         accountRepository.updateStatusById(UUID.fromString(updateBillingRequest.getAccountId()), PaymentStatus.valueOf(updateBillingRequest.getPaymentStatus()));
         Account response = accountRepository.findById(UUID.fromString(updateBillingRequest.getAccountId()))
-                .orElseThrow(()-> new RuntimeException("Data Not Found"));
+                .orElseThrow(()-> new DataNotFoundException("No Account Found with the Id"+updateBillingRequest.getAccountId()));
 
-        return accountMapper.modelClassToGrpc(response);
+        return accountMapper.modelClassToGrpcUpdateBillingResponse(response);
     }
 }

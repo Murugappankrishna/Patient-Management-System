@@ -16,5 +16,5 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
     @Query("UPDATE Account A SET A.paymentStatus=:status WHERE A.accountId=:id")
     @Modifying
     @Transactional
-    int updateStatusById(UUID id , PaymentStatus status);
+    void updateStatusById(UUID id , PaymentStatus status);
 }

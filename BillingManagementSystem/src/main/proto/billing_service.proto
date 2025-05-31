@@ -22,8 +22,8 @@ string patientEmail=4;
 }
 
 message UpdateBillingRequest{
-  string accountId =2;
-  string paymentStatus = 3;
+  string accountId =1;
+  string paymentStatus = 2;
 }
 
 message UpdateBillingResponse {

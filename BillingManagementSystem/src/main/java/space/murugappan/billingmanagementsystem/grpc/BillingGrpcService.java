@@ -42,8 +42,8 @@ public class BillingGrpcService extends BillingServiceImplBase {
     @Override
     public void updateBillingStatus(UpdateBillingRequest UpdateBillingRequest,
                                     StreamObserver<UpdateBillingResponse> responseObserver) {
-        AccountResponse updatedBillingResponse = billingService.updateBillingStatus(UpdateBillingRequest);
-       // responseObserver.onNext(updatedBillingResponse);
+        UpdateBillingResponse updatedBillingResponse = billingService.updateBillingStatus(UpdateBillingRequest);
+        responseObserver.onNext(updatedBillingResponse);
         responseObserver.onCompleted();
 
 
