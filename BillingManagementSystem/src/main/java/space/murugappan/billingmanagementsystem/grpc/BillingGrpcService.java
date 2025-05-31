@@ -1,17 +1,17 @@
 package space.murugappan.billingmanagementsystem.grpc;
 
-import billing.BillingRequest;
-import billing.BillingResponse;
+import billing.AccountRequest;
+import billing.AccountResponse;
 import billing.BillingServiceGrpc.BillingServiceImplBase;
 import billing.UpdateBillingRequest;
+import billing.UpdateBillingResponse;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validator;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import space.murugappan.billingmanagementsystem.Exception.EmailAlreadyExistException;
+import space.murugappan.billingmanagementsystem.exception.EmailAlreadyExistException;
 import space.murugappan.billingmanagementsystem.service.BillingService;
 
 
@@ -19,18 +19,15 @@ import space.murugappan.billingmanagementsystem.service.BillingService;
 public class BillingGrpcService extends BillingServiceImplBase {
     private static final Logger log = LoggerFactory.getLogger(BillingGrpcService.class);
     private final BillingService billingService;
-
     BillingGrpcService(BillingService billingService) {
-
         this.billingService = billingService;
     }
-
     @Override
-    public void createBillingAccount(BillingRequest billingRequest,
-                                     StreamObserver<BillingResponse> responseObserver) {
+    public void createBillingAccount(AccountRequest accountRequest,
+                                     StreamObserver<AccountResponse> responseObserver) {
         try {
-            BillingResponse billingResponse = billingService.createBillingAccount(billingRequest);
-            responseObserver.onNext(billingResponse);
+            AccountResponse createdAccount = billingService.createBillingAccount(accountRequest);
+            responseObserver.onNext(createdAccount);
             responseObserver.onCompleted();
         } catch (EmailAlreadyExistException ex) {
             responseObserver.onError(Status.ALREADY_EXISTS.withDescription(ex.getMessage()).withCause(ex).asRuntimeException());
@@ -44,10 +41,9 @@ public class BillingGrpcService extends BillingServiceImplBase {
 
     @Override
     public void updateBillingStatus(UpdateBillingRequest UpdateBillingRequest,
-                                    StreamObserver<UpdateBillingRequest> responseObserver) {
-        BillingResponse  billingResponse  = billingService.updateBillingStatus(UpdateBillingRequest);
-
-      //responseObserver.onNext(billingResponse);
+                                    StreamObserver<UpdateBillingResponse> responseObserver) {
+        AccountResponse updatedBillingResponse = billingService.updateBillingStatus(UpdateBillingRequest);
+       // responseObserver.onNext(updatedBillingResponse);
         responseObserver.onCompleted();
 
 

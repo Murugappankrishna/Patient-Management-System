@@ -9,7 +9,7 @@ import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
 import java.util.UUID;
 
 @Entity
-public class BillingRequestModel {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID accountId;
@@ -23,7 +23,7 @@ public class BillingRequestModel {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    public BillingRequestModel() {
+    public Account() {
         this.paymentStatus = PaymentStatus.NEW;
     }
 

@@ -1,51 +1,51 @@
 package space.murugappan.billingmanagementsystem.service;
 
-import billing.BillingRequest;
-import billing.BillingResponse;
+import billing.AccountResponse;
+import billing.AccountRequest;
 import billing.UpdateBillingRequest;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
-import space.murugappan.billingmanagementsystem.Exception.EmailAlreadyExistException;
+import space.murugappan.billingmanagementsystem.exception.EmailAlreadyExistException;
 import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
-import space.murugappan.billingmanagementsystem.mapper.GrpcToJavaMapper;
-import space.murugappan.billingmanagementsystem.model.BillingRequestModel;
-import space.murugappan.billingmanagementsystem.repo.BillingRequestRepo;
+import space.murugappan.billingmanagementsystem.mapper.AccountMapper;
+import space.murugappan.billingmanagementsystem.model.Account;
+import space.murugappan.billingmanagementsystem.repo.AccountRepository;
 
 import java.util.UUID;
 
 @Service
 public class BillingService {
-    final GrpcToJavaMapper grpcToJavaMapper;
-    final BillingRequestRepo billingRequestRepo;
+    final AccountMapper accountMapper;
+    final AccountRepository accountRepository;
     final private Validator validator;
 
-    BillingService(GrpcToJavaMapper grpcToJavaMapper, BillingRequestRepo billingRequestRepo, Validator validator) {
-        this.grpcToJavaMapper = grpcToJavaMapper;
-        this.billingRequestRepo = billingRequestRepo;
+    BillingService(AccountMapper accountMapper, AccountRepository accountRepository, Validator validator) {
+        this.accountMapper = accountMapper;
+        this.accountRepository = accountRepository;
         this.validator = validator;
     }
 
-    public BillingResponse createBillingAccount(BillingRequest billingRequest) {
-        BillingRequestModel billingRequestModel = grpcToJavaMapper.billingRequestMapper(billingRequest);
-        var violations = validator.validate(billingRequestModel);
+    public AccountResponse createBillingAccount(AccountRequest billingRequest) {
+        Account account = accountMapper.gprcModelToModelClass(billingRequest);
+        var violations = validator.validate(account);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException("Validation failed", violations);
         }
-        if (billingRequestRepo.existsByPatientEmail(billingRequest.getPatientEmail())) {
+        if (accountRepository.existsByPatientEmail(billingRequest.getPatientEmail())) {
             throw new EmailAlreadyExistException("Email Already Exists !" + billingRequest.getPatientEmail());
         }
-        BillingRequestModel savedBillingRequestModel = billingRequestRepo.save(billingRequestModel);
-        return grpcToJavaMapper.javaToGrpcMapper(savedBillingRequestModel);
+        Account createdAccount = accountRepository.save(account);
+        return accountMapper.modelClassToGrpc(createdAccount);
 
 
     }
 
-    public BillingResponse updateBillingStatus(UpdateBillingRequest updateBillingRequest) {
-        billingRequestRepo.updateStatusById(UUID.fromString(updateBillingRequest.getAccountId()), PaymentStatus.valueOf(updateBillingRequest.getPaymentStatus()));
-        BillingRequestModel response = billingRequestRepo.findById(UUID.fromString(updateBillingRequest.getAccountId()))
+    public AccountResponse updateBillingStatus(UpdateBillingRequest updateBillingRequest) {
+        accountRepository.updateStatusById(UUID.fromString(updateBillingRequest.getAccountId()), PaymentStatus.valueOf(updateBillingRequest.getPaymentStatus()));
+        Account response = accountRepository.findById(UUID.fromString(updateBillingRequest.getAccountId()))
                 .orElseThrow(()-> new RuntimeException("Data Not Found"));
 
-        return grpcToJavaMapper.javaToGrpcMapper(response);
+        return accountMapper.modelClassToGrpc(response);
     }
 }
