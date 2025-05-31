@@ -3,5 +3,5 @@ GRPC 127.0.0.1:4001/BillingService/CreateBillingAccount
 {
   "patientId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "patientName": "TEST TEST",
-  "patientEmail": "murugappan_m@murugappan.space"
+  "patientEmail": "murugappan_m@fda.space"
 }
