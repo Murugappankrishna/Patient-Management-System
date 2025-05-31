@@ -7,11 +7,10 @@ import billing.UpdateBillingRequest;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validator;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import space.murugappan.billingmanagementsystem.Exception.EmailAlreadyExistException;
+import space.murugappan.billingmanagementsystem.exception.EmailAlreadyExistException;
 import space.murugappan.billingmanagementsystem.service.BillingService;
 
 

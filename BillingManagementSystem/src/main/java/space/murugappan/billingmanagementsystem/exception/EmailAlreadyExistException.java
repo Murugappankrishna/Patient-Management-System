@@ -1,4 +1,4 @@
-package space.murugappan.billingmanagementsystem.Exception;
+package space.murugappan.billingmanagementsystem.exception;
 
 public class EmailAlreadyExistException extends RuntimeException{
    public EmailAlreadyExistException(String message){

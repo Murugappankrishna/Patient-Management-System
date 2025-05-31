@@ -6,7 +6,7 @@ import billing.UpdateBillingRequest;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
-import space.murugappan.billingmanagementsystem.Exception.EmailAlreadyExistException;
+import space.murugappan.billingmanagementsystem.exception.EmailAlreadyExistException;
 import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
 import space.murugappan.billingmanagementsystem.mapper.GrpcToJavaMapper;
 import space.murugappan.billingmanagementsystem.model.BillingRequestModel;
