@@ -8,7 +8,7 @@ import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
 import space.murugappan.billingmanagementsystem.exception.EmailAlreadyExistException;
 import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
-import space.murugappan.billingmanagementsystem.mapper.GrpcToJavaMapper;
+import space.murugappan.billingmanagementsystem.mapper.AccountMapper;
 import space.murugappan.billingmanagementsystem.model.Account;
 import space.murugappan.billingmanagementsystem.repo.AccountRepository;
 
@@ -16,18 +16,18 @@ import java.util.UUID;
 
 @Service
 public class BillingService {
-    final GrpcToJavaMapper grpcToJavaMapper;
+    final AccountMapper accountMapper;
     final AccountRepository accountRepository;
     final private Validator validator;
 
-    BillingService(GrpcToJavaMapper grpcToJavaMapper, AccountRepository accountRepository, Validator validator) {
-        this.grpcToJavaMapper = grpcToJavaMapper;
+    BillingService(AccountMapper accountMapper, AccountRepository accountRepository, Validator validator) {
+        this.accountMapper = accountMapper;
         this.accountRepository = accountRepository;
         this.validator = validator;
     }
 
     public AccountResponse createBillingAccount(AccountRequest billingRequest) {
-        Account account = grpcToJavaMapper.gprcModelToModelClass(billingRequest);
+        Account account = accountMapper.gprcModelToModelClass(billingRequest);
         var violations = validator.validate(account);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException("Validation failed", violations);
@@ -36,7 +36,7 @@ public class BillingService {
             throw new EmailAlreadyExistException("Email Already Exists !" + billingRequest.getPatientEmail());
         }
         Account createdAccount = accountRepository.save(account);
-        return grpcToJavaMapper.modelClassToGrpc(createdAccount);
+        return accountMapper.modelClassToGrpc(createdAccount);
 
 
     }
@@ -46,6 +46,6 @@ public class BillingService {
         Account response = accountRepository.findById(UUID.fromString(updateBillingRequest.getAccountId()))
                 .orElseThrow(()-> new RuntimeException("Data Not Found"));
 
-        return grpcToJavaMapper.modelClassToGrpc(response);
+        return accountMapper.modelClassToGrpc(response);
     }
 }

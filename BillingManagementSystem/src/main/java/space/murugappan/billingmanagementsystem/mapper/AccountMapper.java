@@ -8,7 +8,7 @@ import space.murugappan.billingmanagementsystem.model.Account;
 import java.util.UUID;
 
 @Component
-public class GrpcToJavaMapper {
+public class AccountMapper {
 
     public Account gprcModelToModelClass(AccountRequest billingRequest) {
         Account account = new Account();
