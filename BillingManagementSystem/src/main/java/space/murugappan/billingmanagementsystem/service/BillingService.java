@@ -1,7 +1,7 @@
 package space.murugappan.billingmanagementsystem.service;
 
-import billing.BillingRequest;
-import billing.BillingResponse;
+import billing.AccountResponse;
+import billing.AccountRequest;
 import billing.UpdateBillingRequest;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
@@ -26,7 +26,7 @@ public class BillingService {
         this.validator = validator;
     }
 
-    public BillingResponse createBillingAccount(BillingRequest billingRequest) {
+    public AccountResponse createBillingAccount(AccountRequest billingRequest) {
         Account account = grpcToJavaMapper.gprcModelToModelClass(billingRequest);
         var violations = validator.validate(account);
         if (!violations.isEmpty()) {
@@ -41,7 +41,7 @@ public class BillingService {
 
     }
 
-    public BillingResponse updateBillingStatus(UpdateBillingRequest updateBillingRequest) {
+    public AccountResponse updateBillingStatus(UpdateBillingRequest updateBillingRequest) {
         accountRepository.updateStatusById(UUID.fromString(updateBillingRequest.getAccountId()), PaymentStatus.valueOf(updateBillingRequest.getPaymentStatus()));
         Account response = accountRepository.findById(UUID.fromString(updateBillingRequest.getAccountId()))
                 .orElseThrow(()-> new RuntimeException("Data Not Found"));

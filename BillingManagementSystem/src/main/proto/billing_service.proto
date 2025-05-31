@@ -4,20 +4,21 @@ option java_package="billing";
 
 
 service BillingService{
-  rpc CreateBillingAccount(BillingRequest) returns (BillingResponse);
-  rpc UpdateBillingStatus(UpdateBillingRequest) returns  (UpdateBillingRequest);
+  rpc CreateBillingAccount(AccountRequest) returns (AccountResponse);
+  rpc UpdateBillingStatus(UpdateBillingRequest) returns  (UpdateBillingResponse);
  }
 
-message BillingRequest{
+message AccountRequest{
   string patientId=1;
   string patientName = 2;
   string patientEmail=3;
 }
 
-message  BillingResponse {
+message  AccountResponse {
 string accountId = 1;
 string patientName=2;
 string patientId = 3;
+string patientEmail=4;
 }
 
 message UpdateBillingRequest{

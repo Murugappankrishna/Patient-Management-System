@@ -1,9 +1,10 @@
 package space.murugappan.billingmanagementsystem.grpc;
 
-import billing.BillingRequest;
-import billing.BillingResponse;
+import billing.AccountRequest;
+import billing.AccountResponse;
 import billing.BillingServiceGrpc.BillingServiceImplBase;
 import billing.UpdateBillingRequest;
+import billing.UpdateBillingResponse;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.validation.ConstraintViolationException;
@@ -22,10 +23,10 @@ public class BillingGrpcService extends BillingServiceImplBase {
         this.billingService = billingService;
     }
     @Override
-    public void createBillingAccount(BillingRequest billingRequest,
-                                     StreamObserver<BillingResponse> responseObserver) {
+    public void createBillingAccount(AccountRequest accountRequest,
+                                     StreamObserver<AccountResponse> responseObserver) {
         try {
-            BillingResponse createdAccount = billingService.createBillingAccount(billingRequest);
+            AccountResponse createdAccount = billingService.createBillingAccount(accountRequest);
             responseObserver.onNext(createdAccount);
             responseObserver.onCompleted();
         } catch (EmailAlreadyExistException ex) {
@@ -40,8 +41,8 @@ public class BillingGrpcService extends BillingServiceImplBase {
 
     @Override
     public void updateBillingStatus(UpdateBillingRequest UpdateBillingRequest,
-                                    StreamObserver<UpdateBillingRequest> responseObserver) {
-        BillingResponse  billingResponse  = billingService.updateBillingStatus(UpdateBillingRequest);
+                                    StreamObserver<UpdateBillingResponse> responseObserver) {
+        AccountResponse  billingResponse  = billingService.updateBillingStatus(UpdateBillingRequest);
 
       //responseObserver.onNext(billingResponse);
 
