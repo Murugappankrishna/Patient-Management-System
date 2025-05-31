@@ -10,19 +10,19 @@ import space.murugappan.billingmanagementsystem.exception.EmailAlreadyExistExcep
 import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
 import space.murugappan.billingmanagementsystem.mapper.GrpcToJavaMapper;
 import space.murugappan.billingmanagementsystem.model.Account;
-import space.murugappan.billingmanagementsystem.repo.BillingRequestRepo;
+import space.murugappan.billingmanagementsystem.repo.AccountRepository;
 
 import java.util.UUID;
 
 @Service
 public class BillingService {
     final GrpcToJavaMapper grpcToJavaMapper;
-    final BillingRequestRepo billingRequestRepo;
+    final AccountRepository accountRepository;
     final private Validator validator;
 
-    BillingService(GrpcToJavaMapper grpcToJavaMapper, BillingRequestRepo billingRequestRepo, Validator validator) {
+    BillingService(GrpcToJavaMapper grpcToJavaMapper, AccountRepository accountRepository, Validator validator) {
         this.grpcToJavaMapper = grpcToJavaMapper;
-        this.billingRequestRepo = billingRequestRepo;
+        this.accountRepository = accountRepository;
         this.validator = validator;
     }
 
@@ -32,18 +32,18 @@ public class BillingService {
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException("Validation failed", violations);
         }
-        if (billingRequestRepo.existsByPatientEmail(billingRequest.getPatientEmail())) {
+        if (accountRepository.existsByPatientEmail(billingRequest.getPatientEmail())) {
             throw new EmailAlreadyExistException("Email Already Exists !" + billingRequest.getPatientEmail());
         }
-        Account savedBillingRequestModel = billingRequestRepo.save(account);
+        Account savedBillingRequestModel = accountRepository.save(account);
         return grpcToJavaMapper.javaToGrpcMapper(savedBillingRequestModel);
 
 
     }
 
     public BillingResponse updateBillingStatus(UpdateBillingRequest updateBillingRequest) {
-        billingRequestRepo.updateStatusById(UUID.fromString(updateBillingRequest.getAccountId()), PaymentStatus.valueOf(updateBillingRequest.getPaymentStatus()));
-        Account response = billingRequestRepo.findById(UUID.fromString(updateBillingRequest.getAccountId()))
+        accountRepository.updateStatusById(UUID.fromString(updateBillingRequest.getAccountId()), PaymentStatus.valueOf(updateBillingRequest.getPaymentStatus()));
+        Account response = accountRepository.findById(UUID.fromString(updateBillingRequest.getAccountId()))
                 .orElseThrow(()-> new RuntimeException("Data Not Found"));
 
         return grpcToJavaMapper.javaToGrpcMapper(response);

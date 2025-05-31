@@ -11,7 +11,7 @@ import space.murugappan.billingmanagementsystem.model.Account;
 import java.util.UUID;
 
 @Repository
-public interface BillingRequestRepo  extends JpaRepository<Account, UUID> {
+public interface AccountRepository extends JpaRepository<Account, UUID> {
     Boolean existsByPatientEmail(String patientEmail);
     @Query("UPDATE Account A SET A.paymentStatus=:status WHERE A.accountId=:id")
     @Modifying
