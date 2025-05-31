@@ -27,7 +27,7 @@ public class BillingService {
     }
 
     public BillingResponse createBillingAccount(BillingRequest billingRequest) {
-        Account account = grpcToJavaMapper.billingRequestMapper(billingRequest);
+        Account account = grpcToJavaMapper.gprcModelToModelClass(billingRequest);
         var violations = validator.validate(account);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException("Validation failed", violations);
@@ -35,8 +35,8 @@ public class BillingService {
         if (accountRepository.existsByPatientEmail(billingRequest.getPatientEmail())) {
             throw new EmailAlreadyExistException("Email Already Exists !" + billingRequest.getPatientEmail());
         }
-        Account savedBillingRequestModel = accountRepository.save(account);
-        return grpcToJavaMapper.javaToGrpcMapper(savedBillingRequestModel);
+        Account createdAccount = accountRepository.save(account);
+        return grpcToJavaMapper.modelClassToGrpc(createdAccount);
 
 
     }
@@ -46,6 +46,6 @@ public class BillingService {
         Account response = accountRepository.findById(UUID.fromString(updateBillingRequest.getAccountId()))
                 .orElseThrow(()-> new RuntimeException("Data Not Found"));
 
-        return grpcToJavaMapper.javaToGrpcMapper(response);
+        return grpcToJavaMapper.modelClassToGrpc(response);
     }
 }

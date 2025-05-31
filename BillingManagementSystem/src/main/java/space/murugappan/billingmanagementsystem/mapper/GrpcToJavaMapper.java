@@ -10,7 +10,7 @@ import java.util.UUID;
 @Component
 public class GrpcToJavaMapper {
 
-    public Account billingRequestMapper(BillingRequest billingRequest) {
+    public Account gprcModelToModelClass(BillingRequest billingRequest) {
         Account account = new Account();
         account.setPatientEmail(billingRequest.getPatientEmail());
         account.setPatientName(billingRequest.getPatientName());
@@ -18,7 +18,7 @@ public class GrpcToJavaMapper {
         return account;
     }
 
-    public BillingResponse javaToGrpcMapper(Account account) {
+    public BillingResponse modelClassToGrpc(Account account) {
         return BillingResponse.newBuilder()
                 .setAccountId(account.getAccountId().toString())
                 .setPatientName(account.getPatientName())

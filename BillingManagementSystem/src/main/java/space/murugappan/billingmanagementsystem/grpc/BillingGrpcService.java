@@ -18,18 +18,15 @@ import space.murugappan.billingmanagementsystem.service.BillingService;
 public class BillingGrpcService extends BillingServiceImplBase {
     private static final Logger log = LoggerFactory.getLogger(BillingGrpcService.class);
     private final BillingService billingService;
-
     BillingGrpcService(BillingService billingService) {
-
         this.billingService = billingService;
     }
-
     @Override
     public void createBillingAccount(BillingRequest billingRequest,
                                      StreamObserver<BillingResponse> responseObserver) {
         try {
-            BillingResponse billingResponse = billingService.createBillingAccount(billingRequest);
-            responseObserver.onNext(billingResponse);
+            BillingResponse createdAccount = billingService.createBillingAccount(billingRequest);
+            responseObserver.onNext(createdAccount);
             responseObserver.onCompleted();
         } catch (EmailAlreadyExistException ex) {
             responseObserver.onError(Status.ALREADY_EXISTS.withDescription(ex.getMessage()).withCause(ex).asRuntimeException());
