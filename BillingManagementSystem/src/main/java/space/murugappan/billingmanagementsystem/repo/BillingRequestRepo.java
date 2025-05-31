@@ -6,14 +6,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import space.murugappan.billingmanagementsystem.enums.PaymentStatus;
-import space.murugappan.billingmanagementsystem.model.BillingRequestModel;
+import space.murugappan.billingmanagementsystem.model.Account;
 
 import java.util.UUID;
 
 @Repository
-public interface BillingRequestRepo  extends JpaRepository<BillingRequestModel, UUID> {
+public interface BillingRequestRepo  extends JpaRepository<Account, UUID> {
     Boolean existsByPatientEmail(String patientEmail);
-    @Query("UPDATE BillingRequestModel BM SET BM.paymentStatus=:status WHERE BM.accountId=:id")
+    @Query("UPDATE Account A SET A.paymentStatus=:status WHERE A.accountId=:id")
     @Modifying
     @Transactional
     int updateStatusById(UUID id , PaymentStatus status);
